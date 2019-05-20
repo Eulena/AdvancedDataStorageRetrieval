@@ -20,8 +20,7 @@ from datetime import datetime
 
 
 ## Reflect Tables into SQLAlchemy ORM
-```
-```
+
 ## Python SQL toolkit and Object Relational Mapper
 ```
 import sqlalchemy
