@@ -39,7 +39,7 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 Base = automap_base()
 
 ```
-### reflect the tables
+### Reflect the tables
 
 ```
 Base.prepare(engine, reflect=True)
@@ -388,7 +388,7 @@ temp_range = (calc_temps('2012-02-28', '2012-03-05'))
 print(temp_range)
 
 ```
-### calculate the min/max/avg from previous year
+### Calculate the min/max/avg from previous year
 
 ```
 trip_arrive = dt.date(2018, 4, 1)
@@ -398,7 +398,7 @@ temp_avg_lst_year = (calc_temps((trip_arrive-last_year), (trip_leave-last_year))
 print(temp_avg_lst_year)
 
 ```
-### plot the calculated min/max/avg from previous year as a bar chart
+### Plot the calculated min/max/avg from previous year as a bar chart
 
 ```
 p2p = temp_avg_lst_year[0][2]-temp_avg_lst_year[0][0]
