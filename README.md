@@ -1,7 +1,7 @@
 # Surfs Up!
 
 ## Step 1 - Climate Analysis and Exploration
-```
+
 ```
 %matplotlib inline
 from matplotlib import style
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.style as style
 style.use('fivethirtyeight')
 ```
-```
+
 import numpy as np
 import pandas as pd
 ```
