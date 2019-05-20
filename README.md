@@ -37,22 +37,22 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 ```
 Base = automap_base()
-```
+
 ```
 # reflect the tables
-```
+
 ```
 Base.prepare(engine, reflect=True)
-```
+
 ```
 # View all of the classes that automap found
-```
+
 ```
 Base.classes.keys()
-```
+
 ```
 # Save references to each table
-```
+
 ```
 Measurement = Base.classes.measurement
 Station = Base.classes.station
