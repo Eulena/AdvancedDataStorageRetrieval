@@ -365,6 +365,27 @@ def start_end_trip(start, end):
 if __name__ == '__main__':
     app.run(debug=True)
 ```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climat_app_flask_1.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_2.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_3.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_4.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_5.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_6.png)
+```
+```
+![AdvancedDataStorageRetrieval](Climate_App_FLASK/Climate_app_flask_7.png)
+```
+```
 
 # Temperature Analysis
 
