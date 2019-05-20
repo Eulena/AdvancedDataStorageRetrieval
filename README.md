@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.style as style
 style.use('fivethirtyeight')
 ```
-
+```
 import numpy as np
 import pandas as pd
 ```
@@ -17,12 +17,13 @@ import pandas as pd
 import datetime as dt
 from datetime import datetime
 ```
-```
+
 
 ## Reflect Tables into SQLAlchemy ORM
 ```
 ```
 # Python SQL toolkit and Object Relational Mapper
+```
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -31,7 +32,7 @@ from sqlalchemy import inspect
 ```
 ```
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
-```
+
 ```
 # reflect an existing database into a new model
 ```
@@ -158,31 +159,31 @@ plt.show()
 
 
 # Use Pandas to calcualte the summary statistics for the precipitation data
-```
+
 ```
 precip_df.describe()
-```
+
 ```
 
 ### Station Analysis
 
 # Use inspector to view table details
-```
+
 ```
 for table_name in inspector.get_table_names():
     for column in inspector.get_columns(table_name):
         print( table_name,": ", column.get('name'), ", ", column.get('type'))
-```
+
 ```
 # How many stations are available in this dataset?
-```
+
 ```
 station_list = session.query(Station.id,Station.station,Station.name)
 print(f"There are {station_list.count()} stations in the dataset")
-```
+
 ```
 # List the stations and the counts in descending order.
-```
+
 ```
 station_activity = session.query(Measurement.station,
                   func.count(Measurement.station))\
@@ -190,21 +191,21 @@ station_activity = session.query(Measurement.station,
 .order_by(func.count(Measurement.station).desc())
 for row in station_activity:
     print(row)
-```
+
 ```
 # What are the most active stations? 
-```
+
 ```
 highest_station_activity = session.query(Measurement.station,
                   func.count(Measurement.station))\
 .group_by(Measurement.station)\
 .order_by(func.count(Measurement.station).desc()).limit(1).scalar()
 print(f"The station with the hightest number of observations is {highest_station_activity}. ")
-```
+
 ```
 # Using the station id from the previous query, calculate the lowest temperature recorded, 
 #    highest temperature recorded, and average temperature most active station?
-```
+
 ```
 q = session.query(Station.id,
                   Station.name,
@@ -218,11 +219,11 @@ print(f"Most Active Station ID: {q[0][0]}, \
     Name: {highest_station_activity},\
     Location: {q[0][1]} \nResults: \n    Minimum temperature recorded:  {q[0][2]}\n\
     Maximum temperture recorded :  {q[0][3]}\n    Average temperature recorded:  {avg_tmp_rec}")
-```
+
 ```
 # Choose the station with the highest number of temperature observations = (highest_station_activity)
 # Query the last 12 months of temperature observation data for this station and plot the results as a histogram
-```
+
 ```
 tobs_twelve = session.query(Measurement.tobs)\
     .filter(Measurement.date > year_ago)\
@@ -235,10 +236,10 @@ for row in tobs_twelve:
 ```
 tobs_df = pd.DataFrame(tobs_twelve, columns=['temp'])
 tobs_df.head()
-```
+
 ```
 # Histogram Plot for Temperature Results of the Most Active Station
-```
+
 ```
 plt.subplots(figsize=(8,5))
 
@@ -253,17 +254,21 @@ plt.gcf().subplots_adjust(bottom=0.15)
 plt.tight_layout()
 plt.savefig('temperature_results_hist.png')
 plt.show()
+
 ```
-```
+![AdvancedDataStorageRetrieval](Temp_Station_Histo.png)
+
 
 ## Step 2 - Climate App
-```
+
 ```
 from flask import Flask, render_template, redirect, jsonify
 
 ```
 ```
-#dependencies
+dependencies
+```
+```
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -361,13 +366,13 @@ def start_end_trip(start, end):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
+```
 
 ### Temperature Analysis
 
 # Write a function called `calc_temps` that will accept start date and end date in the format '%Y-%m-%d' 
 # and return the minimum, average, and maximum temperatures for that range of dates
-```
+
 ```
 def calc_temps(start_date, end_date):
     """TMIN, TAVG, and TMAX for a list of dates.
@@ -384,10 +389,10 @@ def calc_temps(start_date, end_date):
         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
 temp_range = (calc_temps('2012-02-28', '2012-03-05'))
 print(temp_range)
-```
+
 ```
 # calculate the min/max/avg from previous year
-```
+
 ```
 trip_arrive = dt.date(2018, 4, 1)
 trip_leave = dt.date(2018, 4, 15)
@@ -422,14 +427,15 @@ plt.ylim(0, 100)
 plt.xlim(0,2)
 fig.tight_layout()
 plt.show()
+
 ```
-```
+![AdvancedDataStorageRetrieval](Temp_Analysis.png)
 
 ### Daily Rainfall Average.
 
 # Calculate the rainfall per weather station for your trip dates using the previous year's matching dates.
 # Sorted in descending order by precipitation amount and list the station, name, latitude, longitude, and elevation.
-```
+
 ```
 def precipitation(start_date, end_date):
     
@@ -455,11 +461,11 @@ def precipitation(start_date, end_date):
             filter(Measurement.station == Station.station).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).group_by(Measurement.station).order_by(Measurement.prcp.desc()).all()
 
 print(precipitation('2017-07-01','2017-07-14'))
-```
+
 ```
 # Create a query that will calculate the daily normals 
 # (i.e. the averages for tmin, tmax, and tavg for all historic data matching a specific month and day)
-```
+
 ```
 def daily_normals(date):
     """Daily Normals.
@@ -476,48 +482,48 @@ def daily_normals(date):
     return session.query(*sel).filter(func.strftime("%m-%d", Measurement.date) == date).all()
     
 daily_normals("01-01")
-```
+
 ```
 # calculate the daily normals for the trip
 # apply tuple of calculations into a list called `normals`
 
 # Start and end date of the trip
-```
+
 ```
 start_date = '2017-07-01'
 end_date ='2017-07-14'
-```
+
 ```
 # Start and end date to create a range of dates
-```
+
 ```
 dates = session.query(Measurement.date).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).group_by(Measurement.date).all()
-```
+
 ```
 # List to get elements in the tuple from the dates
-```
+
 ```
 trip_dates = [x[0] for x in dates]
 ```
-```
+
 
 # Save a list of %m-%d strings with another list comprehension 
-```
+
 ```
 trip_dates_stripped= [x[5:] for x in trip_dates]
-```
+
 ```
 
 # Start month/day and the end month/day 
-```
+
 ```
 start_month_day = trip_dates_stripped[0]
 end_month_day = trip_dates_stripped[-1]
-```
+
 ```
 
 # Loop through the list of %m-%d strings and calculate the normals for each date
-```
+
 ```
 daily_normals = [session.query(func.min(Measurement.tobs),
                        func.avg(Measurement.tobs),
@@ -526,42 +532,43 @@ daily_normals = [session.query(func.min(Measurement.tobs),
 daily_normals = daily_normals[0]
 print("Aggregate Daily Normals for 07-01 to 07-14")
 daily_normals
-```
+
 ```
 # Load the previous query results into a Pandas DataFrame and add the `trip_dates` range as the `date` index
 # Dataframe from the previous query 
-```
+
 ```
 daily_normals_df= pd.DataFrame(daily_normals,columns=['tmin', 'tavg', 'tmax'])
-```
+
 ```
 # Trip_dates added to Pandas DataFrame
-```
+
 ```
 daily_normals_df['date']= trip_dates
-```
+
 ```
 # Changed to datetime object on Pandas, makes x axis title to add 
-```
+
 ```
 daily_normals_df['date'] = pd.to_datetime(daily_normals_df['date'], format='%Y-%m-%d')
-```
+
 ```
 # Index to date
-```
+
 ```
 daily_normals_df.set_index('date',inplace=True)
 
 daily_normals_df
-```
+
 ```
 # Plot the daily normals as an area plot with `stacked=False`
-```
+
 ```
 daily_normals_df.plot(kind='area', alpha=.2, stacked=False, x_compat=True, title="Daily Normals for Trip Dates")
 plt.tight_layout()
 plt.savefig("Images/DailyNormals.png")
 plt.show()
+
 ```
-```
+![AdvancedDataStorageRetrieval](Daily_Normals.png)
 
