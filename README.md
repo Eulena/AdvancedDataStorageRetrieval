@@ -35,7 +35,7 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 ```
 # reflect an existing database into a new model
-```
+
 ```
 Base = automap_base()
 ```
@@ -57,57 +57,57 @@ Base.classes.keys()
 ```
 Measurement = Base.classes.measurement
 Station = Base.classes.station
-```
+
 ```
 # Session (link) from Python to the DB
-```
+
 ```
 session = Session(engine)
 ```
 ```
 inspector = inspect(engine)
 inspector
-```
+
 ```
 # Rename Base to schema
-```
+
 ```
 schema = Base
 schema.classes.items()
-```
+
 ```
 # Use inspector to view table details
-```
+
 ```
 for table_name in inspector.get_table_names():
     for column in inspector.get_columns(table_name):
         print( table_name,": ", column.get('name'), ", ", column.get('type'))
-```
+
 ```
 ## Step 1 - Climate Analysis and Exploration
 ### Precipitation Analysis
 ```
 ```
 # Calculate the date 1 year ago from today
-```
+
 ```
 most_recent_date = session.query(Measurement.date)\
     .order_by(Measurement.date.desc()).first()
 most_recent_date
-```
+
 ```
 # Reduce most recent date of data collected, reduced by 1 year for query for 365 days
-```
+
 ```
 rec_date = str(most_recent_date)[2:-3]
 year_ago = str(eval(rec_date[0:4])-1) + rec_date[4:]
 year_ago
-```
+
 ```
 # View information from Measurement
 # An average of the Station's precipitation measurment is used for this analysis as it made more analysis sense.
 #   The original requirements were for querying precipitation amounts, without mention of average
-```
+
 ```
 test_precip_twelve = session.query(Measurement.date,
                                    func.avg(Measurement.prcp))\
@@ -118,28 +118,28 @@ test_precip_twelve = session.query(Measurement.date,
 for row in test_precip_twelve:
     print(row)
 * Use Pandas to print the summary statistics for the precipitation data.
-```
+
 ```
 # Create dataframe in the rough and sort by date for graph
-```
+
 ```
 precip_df = pd.DataFrame(test_precip_twelve, columns=['date','prcp'])
 precip_df['date'] = pd.to_datetime(precip_df['date'], format='%Y/%m/%d')
 precip_df.sort_values(by=['date'])
 precip_df.head()
-```
+
 ```
 # Reset index to Date and drop dates with no measurements taken for precipitation.
 # This Dataframe is just for the graff of precipation amounts recorded.  
-```
+
 ```
 precip_df.set_index('date', inplace=True)
 precip_df.dropna(inplace=True)
 precip_df.head()
-```
+
 ```
 # Use Pandas Plotting with Matplotlib to plot the data
-```
+
 ```
 precip_df.plot(use_index=True, y='prcp', figsize=(8,5))
 plt.gcf().subplots_adjust(bottom=0.15)
@@ -153,7 +153,7 @@ plt.tight_layout()
 plt.savefig('precipitation_amounts.png')
 plt.show()
 ```
-```
+
 
 ![AdvancedDataStorageRetrieval](precipitation.png)
 
