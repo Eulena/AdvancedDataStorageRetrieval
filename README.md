@@ -368,7 +368,7 @@ if __name__ == '__main__':
 
 # Temperature Analysis
 
-### Write a function called "calc_temps" that will accept start date and end date in the format '%Y-%m-%d' and return the minimum, average, and maximum temperatures for that range of dates
+### Write a function called "calc_temps" that will accept start date and end date in the format '%Y-%m-%d' and return the minimum, average, and maximum temperatures for that range of dates.
 
 ```
 def calc_temps(start_date, end_date):
