@@ -22,7 +22,7 @@ from datetime import datetime
 ## Reflect Tables into SQLAlchemy ORM
 ```
 ```
-# Python SQL toolkit and Object Relational Mapper
+## Python SQL toolkit and Object Relational Mapper
 ```
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -34,7 +34,7 @@ from sqlalchemy import inspect
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 ```
-# reflect an existing database into a new model
+## Reflect an existing database into a new model
 
 ```
 Base = automap_base()
@@ -59,7 +59,7 @@ Measurement = Base.classes.measurement
 Station = Base.classes.station
 
 ```
-# Session (link) from Python to the DB
+## Session (link) from Python to the DB
 
 ```
 session = Session(engine)
@@ -69,14 +69,14 @@ inspector = inspect(engine)
 inspector
 
 ```
-# Rename Base to schema
+## Rename Base to schema
 
 ```
 schema = Base
 schema.classes.items()
 
 ```
-# Use inspector to view table details
+## Use inspector to view table details
 
 ```
 for table_name in inspector.get_table_names():
@@ -84,11 +84,11 @@ for table_name in inspector.get_table_names():
         print( table_name,": ", column.get('name'), ", ", column.get('type'))
 
 ```
-## Step 1 - Climate Analysis and Exploration
-### Precipitation Analysis
+# Step 1 - Climate Analysis and Exploration
+## Precipitation Analysis
 ```
 ```
-# Calculate the date 1 year ago from today
+## Calculate the date 1 year ago from today
 
 ```
 most_recent_date = session.query(Measurement.date)\
@@ -96,7 +96,7 @@ most_recent_date = session.query(Measurement.date)\
 most_recent_date
 
 ```
-# Reduce most recent date of data collected, reduced by 1 year for query for 365 days
+## Reduce most recent date of data collected, reduced by 1 year for query for 365 days
 
 ```
 rec_date = str(most_recent_date)[2:-3]
@@ -104,9 +104,9 @@ year_ago = str(eval(rec_date[0:4])-1) + rec_date[4:]
 year_ago
 
 ```
-# View information from Measurement
-# An average of the Station's precipitation measurment is used for this analysis as it made more analysis sense.
-#   The original requirements were for querying precipitation amounts, without mention of average
+## View information from Measurement
+## An average of the Station's precipitation measurment is used for this analysis as it made more analysis sense.
+##   The original requirements were for querying precipitation amounts, without mention of average
 
 ```
 test_precip_twelve = session.query(Measurement.date,
@@ -120,7 +120,7 @@ for row in test_precip_twelve:
 * Use Pandas to print the summary statistics for the precipitation data.
 
 ```
-# Create dataframe in the rough and sort by date for graph
+## Create dataframe in the rough and sort by date for graph
 
 ```
 precip_df = pd.DataFrame(test_precip_twelve, columns=['date','prcp'])
@@ -129,8 +129,8 @@ precip_df.sort_values(by=['date'])
 precip_df.head()
 
 ```
-# Reset index to Date and drop dates with no measurements taken for precipitation.
-# This Dataframe is just for the graff of precipation amounts recorded.  
+## Reset index to Date and drop dates with no measurements taken for precipitation.
+## This Dataframe is just for the graff of precipation amounts recorded.  
 
 ```
 precip_df.set_index('date', inplace=True)
@@ -138,7 +138,7 @@ precip_df.dropna(inplace=True)
 precip_df.head()
 
 ```
-# Use Pandas Plotting with Matplotlib to plot the data
+## Use Pandas Plotting with Matplotlib to plot the data
 
 ```
 precip_df.plot(use_index=True, y='prcp', figsize=(8,5))
@@ -158,16 +158,16 @@ plt.show()
 ![AdvancedDataStorageRetrieval](precipitation.png)
 
 
-# Use Pandas to calcualte the summary statistics for the precipitation data
+## Use Pandas to calcualte the summary statistics for the precipitation data
 
 ```
 precip_df.describe()
 
 ```
 
-### Station Analysis
+# Station Analysis
 
-# Use inspector to view table details
+## Use inspector to view table details
 
 ```
 for table_name in inspector.get_table_names():
@@ -175,14 +175,14 @@ for table_name in inspector.get_table_names():
         print( table_name,": ", column.get('name'), ", ", column.get('type'))
 
 ```
-# How many stations are available in this dataset?
+## How many stations are available in this dataset?
 
 ```
 station_list = session.query(Station.id,Station.station,Station.name)
 print(f"There are {station_list.count()} stations in the dataset")
 
 ```
-# List the stations and the counts in descending order.
+## List the stations and the counts in descending order.
 
 ```
 station_activity = session.query(Measurement.station,
@@ -193,7 +193,7 @@ for row in station_activity:
     print(row)
 
 ```
-# What are the most active stations? 
+## What are the most active stations? 
 
 ```
 highest_station_activity = session.query(Measurement.station,
@@ -203,8 +203,8 @@ highest_station_activity = session.query(Measurement.station,
 print(f"The station with the hightest number of observations is {highest_station_activity}. ")
 
 ```
-# Using the station id from the previous query, calculate the lowest temperature recorded, 
-#    highest temperature recorded, and average temperature most active station?
+## Using the station id from the previous query, calculate the lowest temperature recorded, 
+##    highest temperature recorded, and average temperature most active station?
 
 ```
 q = session.query(Station.id,
@@ -221,8 +221,8 @@ print(f"Most Active Station ID: {q[0][0]}, \
     Maximum temperture recorded :  {q[0][3]}\n    Average temperature recorded:  {avg_tmp_rec}")
 
 ```
-# Choose the station with the highest number of temperature observations = (highest_station_activity)
-# Query the last 12 months of temperature observation data for this station and plot the results as a histogram
+## Choose the station with the highest number of temperature observations = (highest_station_activity)
+## Query the last 12 months of temperature observation data for this station and plot the results as a histogram
 
 ```
 tobs_twelve = session.query(Measurement.tobs)\
@@ -238,7 +238,7 @@ tobs_df = pd.DataFrame(tobs_twelve, columns=['temp'])
 tobs_df.head()
 
 ```
-# Histogram Plot for Temperature Results of the Most Active Station
+## Histogram Plot for Temperature Results of the Most Active Station
 
 ```
 plt.subplots(figsize=(8,5))
@@ -259,7 +259,7 @@ plt.show()
 ![AdvancedDataStorageRetrieval](Temp_Station_Histo.png)
 
 
-## Step 2 - Climate App
+# Step 2 - Climate App
 
 ```
 from flask import Flask, render_template, redirect, jsonify
@@ -368,10 +368,9 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
-### Temperature Analysis
+# Temperature Analysis
 
-# Write a function called `calc_temps` that will accept start date and end date in the format '%Y-%m-%d' 
-# and return the minimum, average, and maximum temperatures for that range of dates
+## Write a function called "calc_temps" that will accept start date and end date in the format '%Y-%m-%d' and return the minimum, average, and maximum temperatures for that range of dates
 
 ```
 def calc_temps(start_date, end_date):
@@ -391,7 +390,7 @@ temp_range = (calc_temps('2012-02-28', '2012-03-05'))
 print(temp_range)
 
 ```
-# calculate the min/max/avg from previous year
+## calculate the min/max/avg from previous year
 
 ```
 trip_arrive = dt.date(2018, 4, 1)
@@ -399,10 +398,10 @@ trip_leave = dt.date(2018, 4, 15)
 last_year = dt.timedelta(days=365)
 temp_avg_lst_year = (calc_temps((trip_arrive-last_year), (trip_leave-last_year)))
 print(temp_avg_lst_year)
+
 ```
-```
-# plot the calculated min/max/avg from previous year as a bar chart
-```
+## plot the calculated min/max/avg from previous year as a bar chart
+
 ```
 p2p = temp_avg_lst_year[0][2]-temp_avg_lst_year[0][0]
 avgtemp = temp_avg_lst_year[0][1]
@@ -431,10 +430,10 @@ plt.show()
 ```
 ![AdvancedDataStorageRetrieval](Temp_Analysis.png)
 
-### Daily Rainfall Average.
+# Daily Rainfall Average.
 
-# Calculate the rainfall per weather station for your trip dates using the previous year's matching dates.
-# Sorted in descending order by precipitation amount and list the station, name, latitude, longitude, and elevation.
+## Calculate the rainfall per weather station for your trip dates using the previous year's matching dates.
+## Sorted in descending order by precipitation amount and list the station, name, latitude, longitude, and elevation.
 
 ```
 def precipitation(start_date, end_date):
@@ -463,8 +462,7 @@ def precipitation(start_date, end_date):
 print(precipitation('2017-07-01','2017-07-14'))
 
 ```
-# Create a query that will calculate the daily normals 
-# (i.e. the averages for tmin, tmax, and tavg for all historic data matching a specific month and day)
+## Create a query that will calculate the daily normals (i.e. the averages for tmin, tmax, and tavg for all historic data matching a specific month and day)
 
 ```
 def daily_normals(date):
@@ -484,37 +482,37 @@ def daily_normals(date):
 daily_normals("01-01")
 
 ```
-# calculate the daily normals for the trip
-# apply tuple of calculations into a list called `normals`
+## Calculate the daily normals for the trip
+## Apply tuple of calculations into a list called `normals`
 
-# Start and end date of the trip
+## Start and end date of the trip
 
 ```
 start_date = '2017-07-01'
 end_date ='2017-07-14'
 
 ```
-# Start and end date to create a range of dates
+## Start and end date to create a range of dates
 
 ```
 dates = session.query(Measurement.date).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).group_by(Measurement.date).all()
 
 ```
-# List to get elements in the tuple from the dates
+## List to get elements in the tuple from the dates
 
 ```
 trip_dates = [x[0] for x in dates]
 ```
 
 
-# Save a list of %m-%d strings with another list comprehension 
+## Save a list of %m-%d strings with another list comprehension 
 
 ```
 trip_dates_stripped= [x[5:] for x in trip_dates]
 
 ```
 
-# Start month/day and the end month/day 
+## Start month/day and the end month/day 
 
 ```
 start_month_day = trip_dates_stripped[0]
@@ -522,7 +520,7 @@ end_month_day = trip_dates_stripped[-1]
 
 ```
 
-# Loop through the list of %m-%d strings and calculate the normals for each date
+## Loop through the list of %m-%d strings and calculate the normals for each date
 
 ```
 daily_normals = [session.query(func.min(Measurement.tobs),
@@ -534,26 +532,26 @@ print("Aggregate Daily Normals for 07-01 to 07-14")
 daily_normals
 
 ```
-# Load the previous query results into a Pandas DataFrame and add the `trip_dates` range as the `date` index
-# Dataframe from the previous query 
+## Load the previous query results into a Pandas DataFrame and add the `trip_dates` range as the `date` index
+## Dataframe from the previous query 
 
 ```
 daily_normals_df= pd.DataFrame(daily_normals,columns=['tmin', 'tavg', 'tmax'])
 
 ```
-# Trip_dates added to Pandas DataFrame
+## Trip_dates added to Pandas DataFrame
 
 ```
 daily_normals_df['date']= trip_dates
 
 ```
-# Changed to datetime object on Pandas, makes x axis title to add 
+## Changed to datetime object on Pandas, makes x axis title to add 
 
 ```
 daily_normals_df['date'] = pd.to_datetime(daily_normals_df['date'], format='%Y-%m-%d')
 
 ```
-# Index to date
+## Index to date
 
 ```
 daily_normals_df.set_index('date',inplace=True)
@@ -561,7 +559,7 @@ daily_normals_df.set_index('date',inplace=True)
 daily_normals_df
 
 ```
-# Plot the daily normals as an area plot with `stacked=False`
+## Plot the daily normals as an area plot with `stacked=False`
 
 ```
 daily_normals_df.plot(kind='area', alpha=.2, stacked=False, x_compat=True, title="Daily Normals for Trip Dates")
